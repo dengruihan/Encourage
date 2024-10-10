@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, url_for
+from flask import Flask, request, redirect, render_template, session, url_for, flash
 import random
 
 app = Flask(__name__)
@@ -28,6 +28,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        
+        # 检查用户是否输入了账户和密码
+        if not username or not password:
+            flash('错误：账户和密码不能为空，请填写后再尝试登录！')
+            return redirect(url_for('login'))
+
         if username in users and users[username] == password:
             session['username'] = username
             return redirect(url_for('random_page'))
