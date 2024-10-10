@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Page</title>
+<style>
+    * {  
+        box-sizing: border-box;  
+        margin: 0;  
+        padding: 0;  
+    } 
+    body {  
+        font-family: "Arial", "Microsoft YaHei","黑体","宋体",sans-serif;  
+        line-height: 1.6;  
+        background-color: #F5F5F5;  
+    } 
+    /*标题样式*/  
+    header {  
+        background-color: #333;  
+        color: white;  
+        padding: 20px;  
+        text-align: center;  
+    } 
+    /*导航栏样式*/  
+    nav {  
+        overflow: hidden;  
+        background-color: #999;  
+    } 
+    nav a {  
+        float: left;  
+        display: block;  
+        color: white;  
+        text-align: center;  
+        padding: 14px 16px;  
+        text-decoration: none;  
+    } 
+    nav a:hover {  
+        background-color: #06C;  
+    } 
+    /*内容区域样式*/  
+    section {  
+        max-width: 1200px;  
+        margin: 20px auto;  
+        padding: 20px;  
+        background-color: white;  
+    } 
+    article {  
+        padding: 20px;  
+    } 
+    h2 {  
+        color: #666;  
+    } 
+    p {  
+        color: #777;  
+    } 
+    /*侧边栏样式*/  
+    aside {  
+        width: 30%;  
+        float: right;  
+        background-color: #EAEAEA;  
+        padding: 20px;  
+        margin-right: 20px;  
+    } 
+    aside ul {  
+        list-style: none;  
+    } 
+    aside li {  
+        padding: 10px;  
+        border-bottom: 1px solid #DDD;  
+    } 
+    aside li:last-child {  
+        border-bottom: none;  
+    } 
+    /*页脚样式*/  
+    footer {  
+        background-color: #333;  
+        color: white;  
+        text-align: center;  
+        padding: 20px;  
+        position: relative;  
+        bottom: 0;  
+        width: 100%;  
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>Welcome to My Homepage!</h1>
+</header>
+
+<nav>
+    <a href="#home">主页</a>
+    <a href="#progress">进度</a>
+    <a href="#ranking">排名</a>
+</nav>
+
+<section>
+    <article>
+        <h2>About Me</h2>
+        <p>This is a paragraph about myself.</p>
+    </article>
+    
+    <aside>
+        <h2>Links</h2>
+        <ul>
+            <li><a href="#link1">Link 1</a></li>
+            <li><a href="#link2">Link 2</a></li>
+            <li><a href="#link3">Link 3</a></li>
+        </ul>
+    </aside>
+</section>
