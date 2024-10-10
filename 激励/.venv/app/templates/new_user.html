@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>新用户</title>
+</head>
+<body>
+    <h1>您是否是新用户？</h1>
+    <a href="{{ url_for('register', username=username) }}">是，我要注册</a>
+    <a href="{{ url_for('login') }}">否，我已有账号</a>
+</body>
+</html>
