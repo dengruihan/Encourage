@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>灵听</title>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <style>
+       body {
+           padding: 20px;
+           font-family: Arial, sans-serif;
+           background-color: #f0f0f0;
+       }
+       #chat-container {
+           max-width: 600px;
+           margin: 0 auto;
+           background-color: #fff;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           border-radius: 8px;
+           overflow: hidden;
+       }
+       #chat-header {
+           background-color: #007bff;
+           color: #fff;
+           padding: 10px;
+           text-align: center;
+           font-size: 20px;
+           border-bottom: 1px solid #ddd;
+       }
+       #chat-body {
+           padding: 20px;
+           height: 300px;
+           overflow-y: auto;
+       }
+       #chat-body .user-message {
+           color: #333;
+       }
+       #chat-body .ai-message {
+           color: #007bff;
+       }
+       #chat-body .loading-message {
+           font-style: italic;
+           color: #777;
+       }
+       #response {
+           margin-top: 20px;
+           padding: 10px;
+           background-color: #f9f9f9;
+           border: 1px solid #ddd;
+       }
+       #chat-form {
+           display: flex;
+           flex-direction: column;
+           padding: 10px;
+           border-top: 1px solid #ddd;
+       }
+       input[type="text"] {
+           padding: 10px;
+           margin-bottom: 10px;
+           border: 1px solid #ddd;
+       }
+       button[type="submit"] {
+           padding: 10px;
+           background-color: #007bff;
+           color: #fff;
+           border: none;
+           cursor: pointer;
+       }
+       button[type="submit"]:hover {
+           background-color: #0056b3;
+       }
+   </style>
+</head>
+<body>
+   <div id="chat-container">
+       <div id="chat-header">灵听</div>
+       <div id="chat-body"></div>
+       <div id="response"></div>
+       <form id="chat-form">
+           <input type="text" id="input" name="input" placeholder="我们聆听您的声音...">
+           <button type="submit">发送</button>
+       </form>
+   </div>
+ 
+   <script>
+       $(document).ready(function() {
+           $('#chat-form').submit(function(e) {
+               e.preventDefault();
+               var userInput = $('#input').val();
+
+               // Display user message immediately
+               $('#chat-body').append('<div class="user-message">User: ' + userInput + '</div>');
+
+               // Display loading message to indicate AI is processing
+               $('#chat-body').append('<div class="loading-message">AI is processing...</div>');
+
+               $.ajax({
+                   type: 'POST',
+                   url: '/chat',
+                   data: { input: userInput },
+                   success: function(response) {
+                       // Hide loading message and display AI response
+                       $('#chat-body .loading-message:last-child').hide();
+                       $('#chat-body').append('<div class="ai-message">AI: ' + response + '</div>');
+                       $('#response').text(''); // Clear previous response
+                   },
+                   error: function(error) {
+                       $('#response').text("An error occurred: " + error.responseText);
+                   }
+               });
+
+               // Clear the input field
+               $('#input').val('');
+           });
+       });
+   </script>
+</body>
+</html>

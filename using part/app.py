@@ -1,18 +1,39 @@
 from zhipuai import ZhipuAI
+from flask import Flask, render_template, request, jsonify
 
-# 初始化客户端，请填写您自己的APIKey
-client = ZhipuAI(api_key="5947c467381fbebbdb52372af7779960.BfqMTtsJAXW9neJi")
+# 创建Flask实例
+app = Flask(__name__)
 
-# 发起请求，流式输出土星的基本信息
-response = client.chat.completions.create(
-    model="GLM-4-Flash",  # 请填写您要调用的模型名称
-    messages=[
-        {"role": "system", "content": "你是一个乐于回答各种问题的小助手，你的任务是提供专业、准确、有洞察力的建议。"},
-        {"role": "user", "content": "我对太阳系的行星非常感兴趣，尤其是土星。请提供关于土星的基本信息，包括它的大小、组成、环系统以及任何独特的天文现象。"},
-    ],
-    stream=True,
-)
+# 创建ZhipuAI实例，并传入APIKey
+client = ZhipuAI(api_key="5947c467381fbebbdb52372af7779960.BfqMTtsJAXW9neJi") # 请填写您自己的APIKey
 
-# 打印流式输出结果
-for chunk in response:
-    print(chunk.choices[0].delta)
+# 定义根路由，返回index.html页面
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# 定义chat路由，接收POST请求，并返回json格式的响应
+@app.route('/chat', methods=['POST'])
+def chat():
+    # 获取表单中的输入
+    user_input = request.form.get('input')
+    # 调用ZhipuAI的chat.completions.create方法，传入模型名称和输入
+    response = client.chat.completions.create(
+        model="glm-4-flash",  # 填写需要调用的模型名称
+        messages=[
+            {"role": "user","content": user_input}
+        ],
+    )
+
+    # 获取AI的回复
+    ai_response = response.choices[0].message.content
+
+    # 删除所有'\n'字符
+    ai_response = ai_response.replace('\n', '')
+
+    # 返回JSON格式的AI响应
+    return jsonify(ai_response)
+
+# 启动Flask实例
+if __name__ == '__main__':
+    app.run(debug=True)
