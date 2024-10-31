@@ -21,6 +21,7 @@ def chat():
     response = client.chat.completions.create(
         model="glm-4-flash",  # 填写需要调用的模型名称
         messages=[
+            {"role": "system", "content": "你是一个专业的勋章设计师，你能够精准的抓住客户的经历之中的特点，并告诉能够准确的描述出这个勋章的详细细节。"},
             {"role": "user","content": user_input}
         ],
     )
