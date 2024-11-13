@@ -32,7 +32,6 @@ def chat():
     #检索“徽章设计方案”字样
     if "1" in ai_response:
         #把设计方案转交至cogview
-        clientc = ZhipuAI(api_key="fed76c71e516c486e1bcc058fc6bf4ca.Lni1nsQevsfJvVhG")
         responsec = client.images.generations(
         model="cogView-3-plus", #填写需要调用的模型编码
         prompt=ai_response,

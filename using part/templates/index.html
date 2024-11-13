@@ -101,7 +101,13 @@
                    success: function(response) {
                         // Hide loading message and display AI response
                         $('#chat-body .loading-message:last-child').hide();
-                        $('#chat-body').append('<div class="ai-message">AI: ' + JSON.stringify(response) + '</div>');
+                        if (response.startsWith("http")) {
+                            // Display image
+                            $('#chat-body').append('<div class="ai-message"><img src="' + response + '" alt="AI Response"></div>');
+                        } else {
+                            // Display text
+                            $('#chat-body').append('<div class="ai-message">AI: ' + response + '</div>');
+                        }
                         $('#response').text(''); // Clear previous response
                     },
                    error: function(error) {
