@@ -48,6 +48,10 @@
            background-color: #f9f9f9;
            border: 1px solid #ddd;
        }
+       .ai-image {
+        max-width: 100%; /* 限制最大宽度为容器的100% */
+        max-height: 300px; /* 限制最大高度 */
+    }
        #chat-form {
            display: flex;
            flex-direction: column;
@@ -103,7 +107,7 @@
                         $('#chat-body .loading-message:last-child').hide();
                         if (response.startsWith("http")) {
                             // Display image
-                            $('#chat-body').append('<div class="ai-message"><img src="' + response + '" alt="AI Response"></div>');
+                            $('#chat-body').append('<div class="ai-message"><img src="' + response + '" alt="AI Response" class="ai-image"></div>');
                         } else {
                             // Display text
                             $('#chat-body').append('<div class="ai-message">AI: ' + response + '</div>');

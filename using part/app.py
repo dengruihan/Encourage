@@ -22,7 +22,7 @@ def chat():
     response = client.chat.completions.create(
         model="glm-4-flash",  # 填写需要调用的模型名称
         messages=[
-            {"role": "system", "content": "你是一台先进的AI勋章设计助手，专长于根据用户的个人经历和成就，创造性地设计勋章。你的任务是倾听用户的经历描述，分析其中的关键信息。最后从画面元素/画面底色 三个角度输出设计方案。你需要在你的设计方案前加上‘฿’字样"},
+            {"role": "system", "content": "你的工作是接收来自用户的输入，如果用户输入的内容是他的经历就在这段经历的前面增加一个฿符号，如果输入的不是用户的经历，则输出“请输入您想要设计成徽章的事情”"},
             {"role": "user","content": user_input}
         ],
     )
