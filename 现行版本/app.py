@@ -1,8 +1,10 @@
 from zhipuai import ZhipuAI
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session
+import os
 
 # 创建Flask实例
 app = Flask(__name__)
+app.secret_key = os.urandom(24) # 用于保护会话安全
 
 # 创建ZhipuAI实例，并传入APIKey
 client = ZhipuAI(api_key="5947c467381fbebbdb52372af7779960.BfqMTtsJAXW9neJi") # 请填写您自己的APIKey
@@ -11,6 +13,35 @@ clientc = ZhipuAI(api_key="fed76c71e516c486e1bcc058fc6bf4ca.Lni1nsQevsfJvVhG")
 # 定义根路由，返回index.html页面
 @app.route('/')
 def home():
+    return render_template('index.html')
+
+# 定义登录路由
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # 这里应该添加验证用户名和密码的逻辑
+        # 如果验证成功
+        session['username'] = username
+        return redirect(url_for('home'))
+    return render_template('login.html')
+
+# 定义注册路由
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # 这里应该添加将新用户添加到数据库的逻辑
+        return redirect(url_for('login'))
+    return render_template('register.html')  # 假设你有一个注册页面
+
+# 更新主页路由以检查用户是否已登录
+@app.route('/')
+def home():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 # 定义chat路由，接收POST请求，并返回json格式的响应
