@@ -1,10 +1,51 @@
 from zhipuai import ZhipuAI
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask_sqlalchemy import SQLAlchemy
 import os
 
 # 创建Flask实例
 app = Flask(__name__)
 app.secret_key = os.urandom(24) # 用于保护会话安全
+app.config['SECRET_KEY'] = 'your-secret-key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your-database.db'
+db = SQLAlchemy(app)
+
+# 定义用户模型
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+
+ # 创建数据库和表
+db.create_all()
+
+# 注册视图
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        # 这里应该添加检查用户是否已存在的逻辑
+        new_user = User(username=username, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+# 登录视图
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username, password=password).first()
+        if user:
+            session['username'] = username
+            return redirect(url_for('homecheck'))
+        else:
+            # 处理登录失败的情况
+            pass
+    return render_template('login.html')
 
 # 创建ZhipuAI实例，并传入APIKey
 client = ZhipuAI(api_key="5947c467381fbebbdb52372af7779960.BfqMTtsJAXW9neJi") # 请填写您自己的APIKey
@@ -13,33 +54,12 @@ clientc = ZhipuAI(api_key="fed76c71e516c486e1bcc058fc6bf4ca.Lni1nsQevsfJvVhG")
 # 定义根路由，返回index.html页面
 @app.route('/')
 def home():
-    return render_template('index.html')
-
-# 定义登录路由
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # 这里应该添加验证用户名和密码的逻辑
-        # 如果验证成功
-        session['username'] = username
-        return redirect(url_for('home'))
     return render_template('login.html')
 
-# 定义注册路由
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        # 这里应该添加将新用户添加到数据库的逻辑
-        return redirect(url_for('login'))
-    return render_template('register.html')  # 假设你有一个注册页面
 
 # 更新主页路由以检查用户是否已登录
 @app.route('/')
-def home():
+def homecheck():
     if 'username' not in session:
         return redirect(url_for('login'))
     return render_template('index.html')
